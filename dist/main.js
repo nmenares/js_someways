@@ -20139,6 +20139,21 @@ var Maze = function (_React$Component) {
         if (done) {
           var ball = new _ball.Ball({ pos: [cellSize, height - cellSize], radius: cellSpacing - 1, ctx: ctx });
           ball.draw();
+          window.addEventListener("keydown", function (e) {
+            if (e.keyCode === 37) {
+              //left
+              ball.move(ball.pos[0] - (cellSize + cellSpacing), ball.pos[1]);
+            } else if (e.keyCode === 38) {
+              //up
+              ball.move(ball.pos[0], ball.pos[1] - (cellSize + cellSpacing));
+            } else if (e.keyCode === 39) {
+              //right
+              ball.move(ball.pos[0] + (cellSize + cellSpacing), ball.pos[1]);
+            } else if (e.keyCode === 40) {
+              //down
+              ball.move(ball.pos[0], ball.pos[1] + (cellSize + cellSpacing));
+            }
+          });
           clearInterval(timerId);
         }
         return done;
