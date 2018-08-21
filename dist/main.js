@@ -20137,6 +20137,8 @@ var Maze = function (_React$Component) {
           if (done) break;
         }
         if (done) {
+          var ball = new _ball.Ball({ pos: [cellSize, height - cellSize], radius: cellSpacing - 1, ctx: ctx });
+          ball.draw();
           clearInterval(timerId);
         }
         return done;
@@ -20261,7 +20263,7 @@ var MazeObj = exports.MazeObj = function () {
       var d1 = void 0;
       var open = this.cells[next_cel_num] == null;
 
-      this.ctx.fillStyle = open ? "white" : "black"; //if cell has a value fill white
+      this.ctx.fillStyle = open ? "white" : "black";
 
       if (d0 === "N") {
         this.fillSouth(next_cel_num);

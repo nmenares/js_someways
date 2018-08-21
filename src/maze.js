@@ -26,6 +26,8 @@ class Maze extends React.Component{
         if (done) break;
       }
       if (done) {
+        const ball = new Ball({ pos: [cellSize, height - cellSize], radius: cellSpacing - 1, ctx: ctx});
+        ball.draw();
         clearInterval(timerId);
       }
       return done;

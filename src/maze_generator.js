@@ -70,7 +70,7 @@ export class MazeObj {
     let d1;
     let open = this.cells[next_cel_num] == null;
 
-    this.ctx.fillStyle = open ? "white" : "black"; //if cell has a value fill white
+    this.ctx.fillStyle = open ? "white" : "black";
 
     if (d0 === "N") {
       this.fillSouth(next_cel_num);
