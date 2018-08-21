@@ -20142,15 +20142,19 @@ var Maze = function (_React$Component) {
           window.addEventListener("keydown", function (e) {
             if (e.keyCode === 37) {
               //left
+              e.preventDefault();
               ball.move(ball.pos[0] - (cellSize + cellSpacing), ball.pos[1]);
             } else if (e.keyCode === 38) {
               //up
+              e.preventDefault();
               ball.move(ball.pos[0], ball.pos[1] - (cellSize + cellSpacing));
             } else if (e.keyCode === 39) {
               //right
+              e.preventDefault();
               ball.move(ball.pos[0] + (cellSize + cellSpacing), ball.pos[1]);
             } else if (e.keyCode === 40) {
               //down
+              e.preventDefault();
               ball.move(ball.pos[0], ball.pos[1] + (cellSize + cellSpacing));
             }
           });
