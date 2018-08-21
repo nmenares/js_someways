@@ -20025,7 +20025,7 @@ var Ball = exports.Ball = function () {
   }, {
     key: "move",
     value: function move(posX, posY) {
-      this.ctx.fillStyle = "rgb(255, 255, 255)";
+      this.ctx.fillStyle = "rgb(219, 213, 213)";
       this.ctx.beginPath();
       this.ctx.fillRect(this.pos[0] - 5, this.pos[1] - 5, 10, 10);
       this.pos[0] = posX;
@@ -20039,6 +20039,93 @@ var Ball = exports.Ball = function () {
 
   return Ball;
 }();
+
+/***/ }),
+
+/***/ "./src/clock.js":
+/*!**********************!*\
+  !*** ./src/clock.js ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Clock = function (_React$Component) {
+  _inherits(Clock, _React$Component);
+
+  function Clock(props) {
+    _classCallCheck(this, Clock);
+
+    var _this = _possibleConstructorReturn(this, (Clock.__proto__ || Object.getPrototypeOf(Clock)).call(this, props));
+
+    _this.clock = _react2.default.createRef();
+    _this.ctx = undefined;
+    return _this;
+  }
+
+  _createClass(Clock, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var ctx = this.clock.current.getContext("2d");
+      var start = 0;
+
+      window.addEventListener("keydown", function (e) {
+        if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
+          var timerId = setInterval(function () {
+            if (start < 600) {
+              ctx.fillStyle = "black";
+              ctx.fillRect(589, 0, 11, 10);
+              ctx.fillStyle = "white";
+              ctx.font = "10px serif";
+              var timer = 60 - start / 10;
+              ctx.fillText("" + timer, 590, 8);
+              ctx.fillStyle = "white";
+              ctx.fillRect(start - 1, 0, 11, 10);
+              start = start + 10;
+            } else {
+              clearInterval(timerId);
+            }
+          }, 1000);
+        }
+      }, { once: true });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react2.default.createElement(
+        "div",
+        null,
+        _react2.default.createElement("canvas", { className: "clock", ref: this.clock, width: "600", height: "10" })
+      );
+    }
+  }]);
+
+  return Clock;
+}(_react2.default.Component);
+
+;
+
+exports.default = Clock;
 
 /***/ }),
 
@@ -20086,6 +20173,7 @@ document.addEventListener("DOMContentLoaded", function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Maze = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -20105,7 +20193,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Maze = function (_React$Component) {
+var Maze = exports.Maze = function (_React$Component) {
   _inherits(Maze, _React$Component);
 
   function Maze(props) {
@@ -20114,7 +20202,6 @@ var Maze = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Maze.__proto__ || Object.getPrototypeOf(Maze)).call(this, props));
 
     _this.canvas = _react2.default.createRef();
-    _this.ctx = undefined;
     return _this;
   }
 
@@ -20128,6 +20215,30 @@ var Maze = function (_React$Component) {
       var cellSpacing = 5;
 
       var maze = new _maze_generator.MazeObj(width, height, cellSize, cellSpacing, ctx);
+      var winner = false;
+
+      var youWin = function youWin() {
+        ctx.fillStyle = "black";
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(0, 0, 800, 500);
+        ctx.fillStyle = "white";
+        ctx.globalAlpha = 1;
+        ctx.textAlign = "center";
+        ctx.font = "64px monospace";
+        ctx.fillText("You Win!", 400, 250);
+        winner = true;
+      };
+
+      var youLose = function youLose() {
+        ctx.fillStyle = "black";
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(0, 0, 800, 500);
+        ctx.fillStyle = "white";
+        ctx.globalAlpha = 1;
+        ctx.textAlign = "center";
+        ctx.font = "64px monospace";
+        ctx.fillText("Game Over", 400, 250);
+      };
 
       var timerId = setInterval(function () {
         var done = void 0;
@@ -20137,28 +20248,88 @@ var Maze = function (_React$Component) {
           if (done) break;
         }
         if (done) {
-          var ball = new _ball.Ball({ pos: [cellSize, height - cellSize], radius: cellSpacing - 1, ctx: ctx });
-          ball.draw();
-          window.addEventListener("keydown", function (e) {
+          var _moveBall = function _moveBall(e) {
             if (e.keyCode === 37) {
-              //left
+              //west
               e.preventDefault();
-              ball.move(ball.pos[0] - (cellSize + cellSpacing), ball.pos[1]);
+              if (maze.cells[start]["W"] === true) {
+                start = start - 1;
+                ball.move(ball.pos[0] - (cellSize + cellSpacing), ball.pos[1]);
+                if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+                  youWin();
+                  window.removeEventListener("keydown", _moveBall);
+                }
+              }
             } else if (e.keyCode === 38) {
-              //up
+              //north
               e.preventDefault();
-              ball.move(ball.pos[0], ball.pos[1] - (cellSize + cellSpacing));
+              if (maze.cells[start]["N"] === true) {
+                start = start - (width - cellSpacing) / (cellSize + cellSpacing);
+                ball.move(ball.pos[0], ball.pos[1] - (cellSize + cellSpacing));
+                if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+                  youWin();
+                  window.removeEventListener("keydown", _moveBall);
+                }
+              }
             } else if (e.keyCode === 39) {
-              //right
+              //east
               e.preventDefault();
-              ball.move(ball.pos[0] + (cellSize + cellSpacing), ball.pos[1]);
+              if (maze.cells[start]["E"] === true) {
+                start = start + 1;
+                ball.move(ball.pos[0] + (cellSize + cellSpacing), ball.pos[1]);
+                if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+                  youWin();
+                  window.removeEventListener("keydown", _moveBall);
+                }
+              }
             } else if (e.keyCode === 40) {
-              //down
+              //south
               e.preventDefault();
-              ball.move(ball.pos[0], ball.pos[1] + (cellSize + cellSpacing));
+              if (maze.cells[start]["S"] === true) {
+                start = start + (width - cellSpacing) / (cellSize + cellSpacing);
+                ball.move(ball.pos[0], ball.pos[1] + (cellSize + cellSpacing));
+                if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+                  youWin();
+                  window.removeEventListener("keydown", _moveBall);
+                }
+              }
             }
-          });
+          };
+
+          var timerBar = function timerBar(e) {
+            if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
+              var timerId2 = setInterval(function () {
+                if (timer < 60 && winner) {
+                  clearInterval(timerId2);
+                } else if (timer < 60) {
+                  timer += 1;
+                } else {
+                  clearInterval(timerId2);
+                  youLose();
+                  window.removeEventListener("keydown", _moveBall);
+                }
+              }, 1000);
+            }
+          };
+
+          ctx.fillStyle = "rgb(61, 254, 213)";
+          ctx.fillRect(0, height - (cellSpacing + cellSize), cellSpacing, cellSize);
+          ctx.fillStyle = "rgb(230, 46, 90)";
+          ctx.fillRect(width - cellSpacing, cellSpacing, cellSpacing, cellSize);
+
+          var ball = new _ball.Ball({ pos: [cellSize, height - cellSize], radius: cellSpacing - 1, ctx: ctx });
+          var start = (width - cellSpacing) / (cellSize + cellSpacing) * ((height - cellSpacing) / (cellSize + cellSpacing) - 1);
+          //start: cell number where the ball is. Each maze.cells[start] has an object with possible directions
+          var timer = 0;
+
+          ball.draw();
+          window.addEventListener("keydown", _moveBall);
+
           clearInterval(timerId);
+
+          ;
+
+          window.addEventListener("keydown", timerBar, { once: true });
         }
         return done;
       }, 50);
@@ -20176,8 +20347,6 @@ var Maze = function (_React$Component) {
 
   return Maze;
 }(_react2.default.Component);
-
-exports.default = Maze;
 
 /***/ }),
 
@@ -20360,7 +20529,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _maze = __webpack_require__(/*! ./maze */ "./src/maze.js");
 
-var _maze2 = _interopRequireDefault(_maze);
+var _clock = __webpack_require__(/*! ./clock */ "./src/clock.js");
+
+var _clock2 = _interopRequireDefault(_clock);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20376,7 +20547,8 @@ var Someways = function Someways() {
     _react2.default.createElement(
       'div',
       { className: 'game' },
-      _react2.default.createElement(_maze2.default, null)
+      _react2.default.createElement(_maze.Maze, null),
+      _react2.default.createElement(_clock2.default, null)
     )
   );
 };

@@ -4,3 +4,10 @@
   width: 800px;
   heigh: 500px;
 }
+
+.clock{
+  border: 2px solid black;
+  background-color: black;
+  width: 800px;
+  heigh: 10px;
+}

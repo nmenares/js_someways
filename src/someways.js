@@ -1,5 +1,6 @@
 import React from 'react';
-import Maze from './maze';
+import { Maze } from './maze';
+import Clock from './clock';
 
 const Someways = () => (
   <div>
@@ -8,6 +9,7 @@ const Someways = () => (
     </header>
     <div className="game">
       <Maze />
+      <Clock />
     </div>
   </div>
 );

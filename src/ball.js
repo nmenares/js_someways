@@ -13,7 +13,7 @@ export class Ball {
   }
 
   move(posX, posY) {
-    this.ctx.fillStyle = "rgb(255, 255, 255)";
+    this.ctx.fillStyle = "rgb(219, 213, 213)";
     this.ctx.beginPath();
     this.ctx.fillRect(this.pos[0] - 5, this.pos[1] - 5, 10, 10);
     this.pos[0] = posX;
@@ -23,4 +23,5 @@ export class Ball {
     this.ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2 * Math.PI, true);
     this.ctx.fill();
   }
+
 }

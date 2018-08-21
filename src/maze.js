@@ -2,11 +2,10 @@ import React from 'react';
 import { MazeObj } from './maze_generator';
 import { Ball } from './ball';
 
-class Maze extends React.Component{
+export class Maze extends React.Component{
   constructor(props){
     super(props);
     this.canvas = React.createRef();
-    this.ctx = undefined;
   }
 
   componentDidMount(){
@@ -17,6 +16,30 @@ class Maze extends React.Component{
     const cellSpacing = 5;
 
     const maze = new MazeObj(width, height, cellSize, cellSpacing, ctx);
+    let winner = false;
+
+    const youWin = () => {
+      ctx.fillStyle = "black";
+      ctx.globalAlpha=0.5;
+      ctx.fillRect(0, 0, 800, 500);
+      ctx.fillStyle = "white";
+      ctx.globalAlpha=1;
+      ctx.textAlign = "center";
+      ctx.font = "64px monospace";
+      ctx.fillText("You Win!", 400 , 250);
+      winner = true;
+    };
+
+    const youLose = () => {
+      ctx.fillStyle = "black";
+      ctx.globalAlpha=0.5;
+      ctx.fillRect(0, 0, 800, 500);
+      ctx.fillStyle = "white";
+      ctx.globalAlpha=1;
+      ctx.textAlign = "center";
+      ctx.font = "64px monospace";
+      ctx.fillText("Game Over", 400 , 250);
+    };
 
     const timerId = setInterval(function() {
       let done;
@@ -26,24 +49,83 @@ class Maze extends React.Component{
         if (done) break;
       }
       if (done) {
+        ctx.fillStyle = "rgb(61, 254, 213)";
+        ctx.fillRect(0, height - (cellSpacing + cellSize), cellSpacing, cellSize);
+        ctx.fillStyle = "rgb(230, 46, 90)";
+        ctx.fillRect(width - cellSpacing, cellSpacing, cellSpacing, cellSize);
+
         const ball = new Ball({ pos: [cellSize, height - cellSize], radius: cellSpacing - 1, ctx: ctx});
-        ball.draw();
-        window.addEventListener("keydown", (e) => {
-          if (e.keyCode === 37) { //left
+        let start = (width - cellSpacing)/(cellSize + cellSpacing) * (((height - cellSpacing)/(cellSize + cellSpacing)) - 1)
+        //start: cell number where the ball is. Each maze.cells[start] has an object with possible directions
+        let timer = 0;
+
+        function moveBall(e){
+          if (e.keyCode === 37) { //west
             e.preventDefault();
-            ball.move( ball.pos[0] - (cellSize + cellSpacing), ball.pos[1])
-          } else if (e.keyCode === 38) { //up
+            if(maze.cells[start]["W"] === true) {
+              start = start - 1;
+              ball.move( ball.pos[0] - (cellSize + cellSpacing), ball.pos[1]);
+              if(start === ((width - cellSpacing)/(cellSize + cellSpacing))-1){
+                youWin();
+                window.removeEventListener("keydown", moveBall);
+              }
+            }
+          } else if (e.keyCode === 38) { //north
             e.preventDefault();
-            ball.move( ball.pos[0], ball.pos[1] - (cellSize + cellSpacing))
-          } else if (e.keyCode === 39) { //right
+            if(maze.cells[start]["N"] === true) {
+              start = start - (width - cellSpacing)/(cellSize + cellSpacing);
+              ball.move( ball.pos[0], ball.pos[1] - (cellSize + cellSpacing));
+              if(start === ((width - cellSpacing)/(cellSize + cellSpacing))-1){
+                youWin();
+                window.removeEventListener("keydown", moveBall);
+              }
+            }
+          } else if (e.keyCode === 39) { //east
             e.preventDefault();
-            ball.move( ball.pos[0] + (cellSize + cellSpacing), ball.pos[1])
-          } else if (e.keyCode === 40) { //down
+            if(maze.cells[start]["E"] === true) {
+              start = start + 1;
+              ball.move( ball.pos[0] + (cellSize + cellSpacing), ball.pos[1]);
+              if(start === ((width - cellSpacing)/(cellSize + cellSpacing))-1){
+                youWin();
+                window.removeEventListener("keydown", moveBall);
+              }
+            }
+          } else if (e.keyCode === 40) { //south
             e.preventDefault();
-            ball.move( ball.pos[0], ball.pos[1] + (cellSize + cellSpacing))
+            if(maze.cells[start]["S"] === true) {
+              start = start + (width - cellSpacing)/(cellSize + cellSpacing);
+              ball.move( ball.pos[0], ball.pos[1] + (cellSize + cellSpacing));
+              if(start === ((width - cellSpacing)/(cellSize + cellSpacing))-1){
+                youWin();
+                window.removeEventListener("keydown", moveBall);
+              }
+            }
           }
-        })
+        }
+
+        ball.draw();
+        window.addEventListener("keydown", moveBall );
+
         clearInterval(timerId);
+
+        function timerBar(e) {
+          if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
+            const timerId2  = setInterval( function(){
+              if (timer < 60 && winner) {
+                clearInterval(timerId2);
+              } else if (timer < 60) {
+                timer += 1;
+              } else {
+                clearInterval(timerId2);
+                youLose();
+                window.removeEventListener("keydown", moveBall);
+              }
+              }, 1000)
+            }
+        };
+
+        window.addEventListener("keydown", timerBar, {once: true})
+
       }
       return done;
     }, 50);
@@ -58,5 +140,3 @@ class Maze extends React.Component{
     )
   }
 }
-
-export default Maze;
