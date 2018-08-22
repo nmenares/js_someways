@@ -20023,6 +20023,11 @@ var Ball = exports.Ball = function () {
       this.ctx.fill();
     }
   }, {
+    key: "initialPosition",
+    value: function initialPosition(pos) {
+      this.pos = pos;
+    }
+  }, {
     key: "move",
     value: function move(posX, posY) {
       this.ctx.fillStyle = "rgb(219, 213, 213)";
@@ -20039,93 +20044,6 @@ var Ball = exports.Ball = function () {
 
   return Ball;
 }();
-
-/***/ }),
-
-/***/ "./src/clock.js":
-/*!**********************!*\
-  !*** ./src/clock.js ***!
-  \**********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Clock = function (_React$Component) {
-  _inherits(Clock, _React$Component);
-
-  function Clock(props) {
-    _classCallCheck(this, Clock);
-
-    var _this = _possibleConstructorReturn(this, (Clock.__proto__ || Object.getPrototypeOf(Clock)).call(this, props));
-
-    _this.clock = _react2.default.createRef();
-    _this.ctx = undefined;
-    return _this;
-  }
-
-  _createClass(Clock, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var ctx = this.clock.current.getContext("2d");
-      var start = 0;
-
-      window.addEventListener("keydown", function (e) {
-        if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
-          var timerId = setInterval(function () {
-            if (start < 600) {
-              start = start + 10;
-              ctx.fillStyle = "black";
-              ctx.fillRect(589, 0, 11, 10);
-              ctx.fillStyle = "white";
-              ctx.font = "10px serif";
-              var timer = 60 - start / 10;
-              ctx.fillText("" + timer, 590, 8);
-              ctx.fillStyle = "white";
-              ctx.fillRect(start - 1, 0, 11, 10);
-            } else {
-              clearInterval(timerId);
-            }
-          }, 1000);
-        }
-      }, { once: true });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react2.default.createElement(
-        "div",
-        null,
-        _react2.default.createElement("canvas", { className: "clock", ref: this.clock, width: "600", height: "10" })
-      );
-    }
-  }]);
-
-  return Clock;
-}(_react2.default.Component);
-
-;
-
-exports.default = Clock;
 
 /***/ }),
 
@@ -20203,20 +20121,36 @@ var Maze = exports.Maze = function (_React$Component) {
 
     _this.canvas = _react2.default.createRef();
     _this.clock = _react2.default.createRef();
+    _this.maze = undefined;
+    _this.ball = undefined;
     return _this;
   }
 
   _createClass(Maze, [{
+    key: 'handleRefresh',
+    value: function handleRefresh(e) {
+      e.preventDefault();
+      location.reload();
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var ctx = this.canvas.current.getContext("2d");
       var ctx2 = this.clock.current.getContext("2d");
+
       var width = 800;
       var height = 500;
       var cellSize = 10;
       var cellSpacing = 5;
+      var timer = 0;
+      var start = (width - cellSpacing) / (cellSize + cellSpacing) * ((height - cellSpacing) / (cellSize + cellSpacing) - 1);
+      var outer = document.getElementsByClassName('restart')[0];
 
       var maze = new _maze_generator.MazeObj(width, height, cellSize, cellSpacing, ctx);
+      var ball = new _ball.Ball({ pos: [cellSize, height - cellSize], radius: cellSpacing - 1, ctx: ctx });
+      this.maze = maze;
+      this.ball = ball;
+
       var winner = false;
 
       var youWin = function youWin() {
@@ -20242,6 +20176,106 @@ var Maze = exports.Maze = function (_React$Component) {
         ctx.fillText("Game Over", 400, 250);
       };
 
+      function moveBall(e) {
+        if (e.keyCode === 37) {
+          //west
+          e.preventDefault();
+          if (maze.cells[start]["W"] === true) {
+            start = start - 1;
+            ball.move(ball.pos[0] - (cellSize + cellSpacing), ball.pos[1]);
+            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+              youWin();
+              window.removeEventListener("keydown", moveBall);
+            }
+          }
+        } else if (e.keyCode === 38) {
+          //north
+          e.preventDefault();
+          if (maze.cells[start]["N"] === true) {
+            start = start - (width - cellSpacing) / (cellSize + cellSpacing);
+            ball.move(ball.pos[0], ball.pos[1] - (cellSize + cellSpacing));
+            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+              youWin();
+              window.removeEventListener("keydown", moveBall);
+            }
+          }
+        } else if (e.keyCode === 39) {
+          //east
+          e.preventDefault();
+          if (maze.cells[start]["E"] === true) {
+            start = start + 1;
+            ball.move(ball.pos[0] + (cellSize + cellSpacing), ball.pos[1]);
+            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+              youWin();
+              window.removeEventListener("keydown", moveBall);
+            }
+          }
+        } else if (e.keyCode === 40) {
+          //south
+          e.preventDefault();
+          if (maze.cells[start]["S"] === true) {
+            start = start + (width - cellSpacing) / (cellSize + cellSpacing);
+            ball.move(ball.pos[0], ball.pos[1] + (cellSize + cellSpacing));
+            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+              youWin();
+              window.removeEventListener("keydown", moveBall);
+            }
+          }
+        }
+      };
+
+      function timerBar(e) {
+        if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
+          e.preventDefault();
+          var timerId2 = setInterval(function () {
+            if (timer < 60 && winner) {
+              clearInterval(timerId2);
+            } else if (timer < 60) {
+              timer += 1;
+              ctx2.fillStyle = "black";
+              ctx2.fillRect(590, 0, 11, 10);
+              var time = 60 - timer;
+              ctx2.fillStyle = "white";
+              ctx2.fillRect(timer * 10 - 10, 0, 11, 10);
+              ctx2.fillStyle = "black";
+              ctx2.font = "10px serif";
+              ctx2.fillText('' + time, timer * 10 - 10, 8);
+              ctx2.fillStyle = "white";
+              ctx2.fillRect(timer * 10 - 20, 0, 10, 10);
+            } else {
+              clearInterval(timerId2);
+              youLose();
+              window.removeEventListener("keydown", moveBall);
+            }
+          }, 1000);
+        }
+      };
+
+      function setup() {
+        ctx2.fillStyle = "black";
+        ctx2.fillRect(0, 0, 600, 10);
+        ctx.fillStyle = "rgb(61, 254, 213)";
+        ctx.fillRect(cellSpacing, height - (cellSpacing + cellSize), cellSize, cellSize);
+        ctx.fillStyle = "rgb(230, 46, 90)";
+        ctx.fillRect(width - cellSpacing - cellSize, cellSpacing, cellSize, cellSize);
+      }
+
+      function handleRestart(e) {
+        e.preventDefault();
+        timer = 0;
+        start = (width - cellSpacing) / (cellSize + cellSpacing) * ((height - cellSpacing) / (cellSize + cellSpacing) - 1);
+        window.removeEventListener("keydown", moveBall);
+        window.removeEventListener("keydown", timerBar);
+        outer.removeEventListener("click", handleRestart);
+        maze.cleanMaze();
+        ball.initialPosition([cellSize, height - cellSize]);
+        setup();
+        ball.draw();
+        window.addEventListener("keydown", moveBall);
+        window.addEventListener("keydown", timerBar, { once: true });
+        outer.addEventListener("click", handleRestart);
+      }
+
       var timerId = setInterval(function () {
         var done = void 0;
         var k = 0;
@@ -20250,97 +20284,12 @@ var Maze = exports.Maze = function (_React$Component) {
           if (done) break;
         }
         if (done) {
-          var _moveBall = function _moveBall(e) {
-            if (e.keyCode === 37) {
-              //west
-              e.preventDefault();
-              if (maze.cells[start]["W"] === true) {
-                start = start - 1;
-                ball.move(ball.pos[0] - (cellSize + cellSpacing), ball.pos[1]);
-                if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
-                  youWin();
-                  window.removeEventListener("keydown", _moveBall);
-                }
-              }
-            } else if (e.keyCode === 38) {
-              //north
-              e.preventDefault();
-              if (maze.cells[start]["N"] === true) {
-                start = start - (width - cellSpacing) / (cellSize + cellSpacing);
-                ball.move(ball.pos[0], ball.pos[1] - (cellSize + cellSpacing));
-                if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
-                  youWin();
-                  window.removeEventListener("keydown", _moveBall);
-                }
-              }
-            } else if (e.keyCode === 39) {
-              //east
-              e.preventDefault();
-              if (maze.cells[start]["E"] === true) {
-                start = start + 1;
-                ball.move(ball.pos[0] + (cellSize + cellSpacing), ball.pos[1]);
-                if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
-                  youWin();
-                  window.removeEventListener("keydown", _moveBall);
-                }
-              }
-            } else if (e.keyCode === 40) {
-              //south
-              e.preventDefault();
-              if (maze.cells[start]["S"] === true) {
-                start = start + (width - cellSpacing) / (cellSize + cellSpacing);
-                ball.move(ball.pos[0], ball.pos[1] + (cellSize + cellSpacing));
-                if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
-                  youWin();
-                  window.removeEventListener("keydown", _moveBall);
-                }
-              }
-            }
-          };
-
-          var timerBar = function timerBar(e) {
-            if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
-              e.preventDefault();
-              var timerId2 = setInterval(function () {
-                if (timer < 60 && winner) {
-                  clearInterval(timerId2);
-                } else if (timer < 60) {
-                  timer += 1;
-                  ctx2.fillStyle = "black";
-                  ctx2.fillRect(590, 0, 11, 10);
-                  ctx2.fillStyle = "white";
-                  ctx2.font = "10px serif";
-                  var time = 60 - timer;
-                  ctx2.fillText('' + time, 590, 8);
-                  ctx2.fillStyle = "white";
-                  ctx2.fillRect(timer * 10 - 10, 0, 11, 10);
-                } else {
-                  clearInterval(timerId2);
-                  youLose();
-                  window.removeEventListener("keydown", _moveBall);
-                }
-              }, 1000);
-            }
-          };
-
-          ctx.fillStyle = "rgb(61, 254, 213)";
-          ctx.fillRect(0, height - (cellSpacing + cellSize), cellSpacing, cellSize);
-          ctx.fillStyle = "rgb(230, 46, 90)";
-          ctx.fillRect(width - cellSpacing, cellSpacing, cellSpacing, cellSize);
-
-          var ball = new _ball.Ball({ pos: [cellSize, height - cellSize], radius: cellSpacing - 1, ctx: ctx });
-          var start = (width - cellSpacing) / (cellSize + cellSpacing) * ((height - cellSpacing) / (cellSize + cellSpacing) - 1);
-          //start: cell number where the ball is. Each maze.cells[start] has an object with possible directions
-          var timer = 0;
-
-          ball.draw();
-          window.addEventListener("keydown", _moveBall);
-
           clearInterval(timerId);
-
-          ;
-
+          setup();
+          ball.draw();
+          window.addEventListener("keydown", moveBall);
           window.addEventListener("keydown", timerBar, { once: true });
+          outer.addEventListener("click", handleRestart);
         }
         return done;
       }, 50);
@@ -20356,17 +20305,31 @@ var Maze = exports.Maze = function (_React$Component) {
           { className: 'buttons' },
           _react2.default.createElement(
             'button',
-            null,
+            { onClick: this.handleRefresh.bind(this) },
             'New'
           ),
           _react2.default.createElement(
             'button',
-            null,
+            { className: 'restart' },
             'Restart'
           )
         ),
-        _react2.default.createElement('canvas', { className: 'canvas', ref: this.canvas, width: '800', height: '500' }),
-        _react2.default.createElement('canvas', { className: 'clock', ref: this.clock, width: '600', height: '10' })
+        _react2.default.createElement(
+          'div',
+          { className: 'game' },
+          _react2.default.createElement(
+            'div',
+            { className: 'labyrinth' },
+            _react2.default.createElement(
+              'div',
+              { className: 'startpoint' },
+              _react2.default.createElement('img', { className: 'startarrow', src: '../images/start.png', alt: 'starting point' }),
+              _react2.default.createElement('canvas', { className: 'canvas', ref: this.canvas, width: '800', height: '500' })
+            ),
+            _react2.default.createElement('img', { className: 'endarrow', src: '../images/end.png', alt: 'ending point' })
+          ),
+          _react2.default.createElement('canvas', { className: 'clock', ref: this.clock, width: '600', height: '10' })
+        )
       );
     }
   }]);
@@ -20430,6 +20393,33 @@ var MazeObj = exports.MazeObj = function () {
   }
 
   _createClass(MazeObj, [{
+    key: "cleanMaze",
+    value: function cleanMaze() {
+      var _this = this;
+
+      this.cells.forEach(function (cell, idx) {
+        ["S", "E", "W", "N"].forEach(function (d) {
+          if (d === "S" && cell["S"] === true) {
+            var new_idx = idx + (_this.width - _this.cellSpacing) / (_this.cellSize + _this.cellSpacing);
+            _this.ctx.fillStyle = "white";
+            _this.fillCell(new_idx);
+          } else if (d === "N" && cell["N"] === true) {
+            var _new_idx = idx - (_this.width - _this.cellSpacing) / (_this.cellSize + _this.cellSpacing);
+            _this.ctx.fillStyle = "white";
+            _this.fillCell(_new_idx);
+          } else if (d === "E" && cell["E"] === true) {
+            var _new_idx2 = idx + 1;
+            _this.ctx.fillStyle = "white";
+            _this.fillCell(_new_idx2);
+          } else if (d === "W" && cell["W"] === true) {
+            var _new_idx3 = idx - 1;
+            _this.ctx.fillStyle = "white";
+            _this.fillCell(_new_idx3);
+          }
+        });
+      });
+    }
+  }, {
     key: "fillEast",
     value: function fillEast(index) {
       var i = index % this.cellWidth;
@@ -20555,10 +20545,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _maze = __webpack_require__(/*! ./maze */ "./src/maze.js");
 
-var _clock = __webpack_require__(/*! ./clock */ "./src/clock.js");
-
-var _clock2 = _interopRequireDefault(_clock);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Someways = function Someways() {
@@ -20602,7 +20588,7 @@ var Someways = function Someways() {
         _react2.default.createElement(
           'h3',
           null,
-          'Find the ways hitting the arrow keys.'
+          'Find the exit using the arrow keys.'
         ),
         _react2.default.createElement('img', { src: '../images/arrowkeys.png', alt: 'someways' }),
         _react2.default.createElement(

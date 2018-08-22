@@ -1,6 +1,5 @@
 import React from 'react';
 import { Maze } from './maze';
-import Clock from './clock';
 
 const Someways = () => (
   <div>
@@ -16,7 +15,7 @@ const Someways = () => (
     </header>
     <div className="body">
       <div className="sidebar">
-        <h3>Find the ways hitting the arrow keys.</h3>
+        <h3>Find the exit using the arrow keys.</h3>
         <img src="../images/arrowkeys.png" alt="someways"/>
         <h4>You only have 60 seconds!</h4>
       </div>

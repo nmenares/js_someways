@@ -5,18 +5,53 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .canvas {
   border: 2px solid black;
   background-color: black;
   width: 800px;
   heigh: 500px;
+  margin-bottom: 10px;
+  z-index: 1;
+}
+
+.labyrinth {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.startpoint{
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.labyrinth img {
+  width: 20px;
+}
+
+.startarrow {
+
+  padding-bottom: 2px;
+  z-index: 2;
+}
+.endarrow {
+  margin-left: -10px;
+  padding-top: 2px;
+  z-index: 2;
 }
 
 .clock{
   border: 2px solid black;
-  background-color: black;
   width: 800px;
   heigh: 10px;
+  margin-left: 10px;
 }
 
 .navbar{
@@ -76,6 +111,10 @@ body {
 
 .sidebar img{
   width: 100px;
+}
+
+.buttons {
+  margin-left: 10px;
 }
 
 .buttons button{

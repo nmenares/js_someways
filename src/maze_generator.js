@@ -28,6 +28,30 @@ export class MazeObj {
     this.frontier.push({index: start, direction: "E"});
   }
 
+  cleanMaze(){
+    this.cells.forEach((cell, idx) => {
+      ["S","E", "W", "N"].forEach(d => {
+        if(d==="S" && (cell["S"] === true)) {
+          let new_idx = idx + (this.width - this.cellSpacing)/(this.cellSize + this.cellSpacing);
+          this.ctx.fillStyle = "white";
+          this.fillCell(new_idx)
+        } else if(d==="N" && (cell["N"] === true)) {
+          let new_idx = idx - (this.width - this.cellSpacing)/(this.cellSize + this.cellSpacing);
+          this.ctx.fillStyle = "white";
+          this.fillCell(new_idx)
+        } else if (d==="E" && (cell["E"] === true)) {
+          let new_idx = idx + 1;
+          this.ctx.fillStyle = "white";
+          this.fillCell(new_idx)
+        } else if (d==="W" && (cell["W"] === true)) {
+          let new_idx = idx - 1;
+          this.ctx.fillStyle = "white";
+          this.fillCell(new_idx)
+        }
+      })
+    })
+  }
+
   fillEast(index) {
     let i = index % this.cellWidth;
     let j = Math.floor(index / this.cellWidth);

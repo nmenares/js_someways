@@ -12,6 +12,10 @@ export class Ball {
     this.ctx.fill();
   }
 
+  initialPosition(pos){
+    this.pos = pos;
+  }
+
   move(posX, posY) {
     this.ctx.fillStyle = "rgb(219, 213, 213)";
     this.ctx.beginPath();
