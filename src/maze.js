@@ -134,9 +134,13 @@ export class Maze extends React.Component{
 
   render(){
     return (
-      <div>
-        <canvas className="canvas" ref={this.canvas} width="800" height="500"/>
-      </div>
+        <div className="maze">
+          <div className="buttons">
+            <button>New</button>
+            <button>Restart</button>
+          </div>
+          <canvas className="canvas" ref={this.canvas} width="800" height="500"/>
+        </div>
     )
   }
 }

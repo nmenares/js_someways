@@ -20093,6 +20093,7 @@ var Clock = function (_React$Component) {
         if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
           var timerId = setInterval(function () {
             if (start < 600) {
+              start = start + 10;
               ctx.fillStyle = "black";
               ctx.fillRect(589, 0, 11, 10);
               ctx.fillStyle = "white";
@@ -20101,7 +20102,6 @@ var Clock = function (_React$Component) {
               ctx.fillText("" + timer, 590, 8);
               ctx.fillStyle = "white";
               ctx.fillRect(start - 1, 0, 11, 10);
-              start = start + 10;
             } else {
               clearInterval(timerId);
             }
@@ -20339,7 +20339,21 @@ var Maze = exports.Maze = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'maze' },
+        _react2.default.createElement(
+          'div',
+          { className: 'buttons' },
+          _react2.default.createElement(
+            'button',
+            null,
+            'New'
+          ),
+          _react2.default.createElement(
+            'button',
+            null,
+            'Restart'
+          )
+        ),
         _react2.default.createElement('canvas', { className: 'canvas', ref: this.canvas, width: '800', height: '500' })
       );
     }
@@ -20542,13 +20556,55 @@ var Someways = function Someways() {
     _react2.default.createElement(
       'header',
       { className: 'navbar' },
-      'NAVBAR'
+      _react2.default.createElement(
+        'div',
+        { className: 'sub_navbar' },
+        _react2.default.createElement('img', { src: '../images/someways.png', alt: 'Someways' }),
+        _react2.default.createElement(
+          'h1',
+          null,
+          'SomeWays'
+        )
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'sub_navbar' },
+        _react2.default.createElement(
+          'a',
+          { href: 'https://github.com/nmenares/js_someways', target: '_blank' },
+          _react2.default.createElement('img', { src: '../images/GitHub.png', alt: 'GitHub' })
+        ),
+        _react2.default.createElement(
+          'a',
+          { href: 'https://www.linkedin.com/in/nmenares/', target: '_blank' },
+          _react2.default.createElement('img', { src: '../images/in.png', alt: 'Linkedin' })
+        )
+      )
     ),
     _react2.default.createElement(
       'div',
-      { className: 'game' },
-      _react2.default.createElement(_maze.Maze, null),
-      _react2.default.createElement(_clock2.default, null)
+      { className: 'body' },
+      _react2.default.createElement(
+        'div',
+        { className: 'sidebar' },
+        _react2.default.createElement(
+          'h3',
+          null,
+          'Find the ways hitting the arrow keys.'
+        ),
+        _react2.default.createElement('img', { src: '../images/arrowkeys.png', alt: 'someways' }),
+        _react2.default.createElement(
+          'h4',
+          null,
+          'You only have 60 seconds!'
+        )
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'content' },
+        _react2.default.createElement(_maze.Maze, null),
+        _react2.default.createElement(_clock2.default, null)
+      )
     )
   );
 };

@@ -15,6 +15,7 @@ class Clock extends React.Component{
       if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
         const timerId = setInterval( function(){
           if (start < 600){
+            start = start + 10
             ctx.fillStyle = "black";
             ctx.fillRect(589, 0, 11, 10);
             ctx.fillStyle = "white";
@@ -22,8 +23,7 @@ class Clock extends React.Component{
             let timer = 60 - (start / 10);
             ctx.fillText(`${timer}`, 590 , 8);
             ctx.fillStyle = "white";
-            ctx.fillRect(start-1, 0, 11, 10)
-            start = start + 10
+            ctx.fillRect(start-1, 0, 11, 10)      
           }else{
             clearInterval(timerId);
           }
