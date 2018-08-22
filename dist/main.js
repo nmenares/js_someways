@@ -20202,6 +20202,7 @@ var Maze = exports.Maze = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Maze.__proto__ || Object.getPrototypeOf(Maze)).call(this, props));
 
     _this.canvas = _react2.default.createRef();
+    _this.clock = _react2.default.createRef();
     return _this;
   }
 
@@ -20209,6 +20210,7 @@ var Maze = exports.Maze = function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var ctx = this.canvas.current.getContext("2d");
+      var ctx2 = this.clock.current.getContext("2d");
       var width = 800;
       var height = 500;
       var cellSize = 10;
@@ -20298,11 +20300,20 @@ var Maze = exports.Maze = function (_React$Component) {
 
           var timerBar = function timerBar(e) {
             if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
+              e.preventDefault();
               var timerId2 = setInterval(function () {
                 if (timer < 60 && winner) {
                   clearInterval(timerId2);
                 } else if (timer < 60) {
                   timer += 1;
+                  ctx2.fillStyle = "black";
+                  ctx2.fillRect(590, 0, 11, 10);
+                  ctx2.fillStyle = "white";
+                  ctx2.font = "10px serif";
+                  var time = 60 - timer;
+                  ctx2.fillText('' + time, 590, 8);
+                  ctx2.fillStyle = "white";
+                  ctx2.fillRect(timer * 10 - 10, 0, 11, 10);
                 } else {
                   clearInterval(timerId2);
                   youLose();
@@ -20354,7 +20365,8 @@ var Maze = exports.Maze = function (_React$Component) {
             'Restart'
           )
         ),
-        _react2.default.createElement('canvas', { className: 'canvas', ref: this.canvas, width: '800', height: '500' })
+        _react2.default.createElement('canvas', { className: 'canvas', ref: this.canvas, width: '800', height: '500' }),
+        _react2.default.createElement('canvas', { className: 'clock', ref: this.clock, width: '600', height: '10' })
       );
     }
   }]);
@@ -20602,8 +20614,7 @@ var Someways = function Someways() {
       _react2.default.createElement(
         'div',
         { className: 'content' },
-        _react2.default.createElement(_maze.Maze, null),
-        _react2.default.createElement(_clock2.default, null)
+        _react2.default.createElement(_maze.Maze, null)
       )
     )
   );

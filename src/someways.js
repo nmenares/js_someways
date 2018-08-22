@@ -22,7 +22,6 @@ const Someways = () => (
       </div>
       <div className="content">
         <Maze />
-        <Clock />
       </div>
     </div>
   </div>

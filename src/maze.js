@@ -6,10 +6,12 @@ export class Maze extends React.Component{
   constructor(props){
     super(props);
     this.canvas = React.createRef();
+    this.clock = React.createRef();
   }
 
   componentDidMount(){
     const ctx = this.canvas.current.getContext("2d");
+    const ctx2 = this.clock.current.getContext("2d");
     const width = 800;
     const height = 500;
     const cellSize = 10;
@@ -110,11 +112,20 @@ export class Maze extends React.Component{
 
         function timerBar(e) {
           if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
+            e.preventDefault();
             const timerId2  = setInterval( function(){
               if (timer < 60 && winner) {
                 clearInterval(timerId2);
               } else if (timer < 60) {
                 timer += 1;
+                ctx2.fillStyle = "black";
+                ctx2.fillRect(590, 0, 11, 10);
+                ctx2.fillStyle = "white";
+                ctx2.font = "10px serif";
+                let time = 60 - timer;
+                ctx2.fillText(`${time}`, 590 , 8);
+                ctx2.fillStyle = "white";
+                ctx2.fillRect((timer*10)-10, 0, 11, 10)
               } else {
                 clearInterval(timerId2);
                 youLose();
@@ -140,6 +151,7 @@ export class Maze extends React.Component{
             <button>Restart</button>
           </div>
           <canvas className="canvas" ref={this.canvas} width="800" height="500"/>
+          <canvas className="clock" ref={this.clock} width="600" height="10"/>
         </div>
     )
   }
