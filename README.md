@@ -10,18 +10,18 @@ By clicking the arrows, the user could move one of the 2 objects, the one that s
 ## Functionality & MVP
 In Someways, users will be able to:
 
-- [ ] Generate a new maze:
-  - [ ] An initial maze appropriate for the game.
-  - [ ] Create an initial ball that the user can manipulate by arrow keys.
-  - [ ] Look for a solution that considers the walls of the maze
-- [ ] Visualize how the maze is generated. Handle the canvas to show something specific if the user WINS or LOSES.
-  - [ ] Modify the Maze algorithm given to show how the maze is generated.
-  - [ ] Show GAME OVER on the canvas if the user loses.
-  - [ ] Show the final solution if the user wins.
-- [ ] Restart the same maze.
-  - [ ] Create functional controllers
-- [ ] Watch the timer.
-  - [ ] Add a timer to the page that the user can see all time.
+- [X] Generate a new maze:
+  - [X] An initial maze appropriate for the game.
+  - [X] Create an initial ball that the user can manipulate by arrow keys.
+  - [X] Look for a solution that considers the walls of the maze
+- [X] Visualize how the maze is generated. Handle the canvas to show something specific if the user WINS or LOSES.
+  - [X] Modify the Maze algorithm given to show how the maze is generated.
+  - [X] Show GAME OVER on the canvas if the user loses.
+  - [X] Show the final solution if the user wins.
+- [X] Restart the same maze.
+  - [X] Create functional controllers
+- [X] Watch the timer.
+  - [X] Add a timer to the page that the user can see all time.
 
 ## Wireframes
 
