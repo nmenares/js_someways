@@ -29,6 +29,7 @@ export class Maze extends React.Component{
     let timer = 0;
     let start = (width - cellSpacing)/(cellSize + cellSpacing) * (((height - cellSpacing)/(cellSize + cellSpacing)) - 1);
     let outer  = document.getElementsByClassName('restart') [0];
+    let stop_prior_time = false;
 
     const maze = new MazeObj(width, height, cellSize, cellSpacing, ctx);
     const ball = new Ball({ pos: [cellSize, height - cellSize], radius: cellSpacing - 1, ctx: ctx});
@@ -108,7 +109,10 @@ export class Maze extends React.Component{
       if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
         e.preventDefault();
         const timerId2  = setInterval( function(){
-          if (timer < 60 && winner) {
+          if (stop_prior_time === true){
+            clearInterval(timerId2);
+            stop_prior_time = false;
+          } else if (timer < 60 && winner) {
             clearInterval(timerId2);
           } else if (timer < 60) {
             timer += 1;
@@ -142,6 +146,7 @@ export class Maze extends React.Component{
 
     function handleRestart(e){
       e.preventDefault();
+      stop_prior_time = true;
       timer = 0;
       start = (width - cellSpacing)/(cellSize + cellSpacing) * (((height - cellSpacing)/(cellSize + cellSpacing)) - 1);
       window.removeEventListener("keydown", moveBall);
