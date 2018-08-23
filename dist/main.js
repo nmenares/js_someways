@@ -20323,10 +20323,10 @@ var Maze = exports.Maze = function (_React$Component) {
             _react2.default.createElement(
               'div',
               { className: 'startpoint' },
-              _react2.default.createElement('img', { className: 'startarrow', src: '../images/start.png', alt: 'starting point' }),
+              _react2.default.createElement('img', { className: 'startarrow', src: './images/start.png', alt: 'starting point' }),
               _react2.default.createElement('canvas', { className: 'canvas', ref: this.canvas, width: '800', height: '500' })
             ),
-            _react2.default.createElement('img', { className: 'endarrow', src: '../images/end.png', alt: 'ending point' })
+            _react2.default.createElement('img', { className: 'endarrow', src: './images/end.png', alt: 'ending point' })
           ),
           _react2.default.createElement('canvas', { className: 'clock', ref: this.clock, width: '600', height: '10' })
         )
@@ -20557,7 +20557,7 @@ var Someways = function Someways() {
       _react2.default.createElement(
         'div',
         { className: 'sub_navbar' },
-        _react2.default.createElement('img', { src: '../images/someways.png', alt: 'Someways' }),
+        _react2.default.createElement('img', { src: './images/someways.png', alt: 'Someways' }),
         _react2.default.createElement(
           'h1',
           null,
@@ -20570,12 +20570,12 @@ var Someways = function Someways() {
         _react2.default.createElement(
           'a',
           { href: 'https://github.com/nmenares/js_someways', target: '_blank' },
-          _react2.default.createElement('img', { src: '../images/GitHub.png', alt: 'GitHub' })
+          _react2.default.createElement('img', { src: './images/GitHub.png', alt: 'GitHub' })
         ),
         _react2.default.createElement(
           'a',
           { href: 'https://www.linkedin.com/in/nmenares/', target: '_blank' },
-          _react2.default.createElement('img', { src: '../images/in.png', alt: 'Linkedin' })
+          _react2.default.createElement('img', { src: './images/in.png', alt: 'Linkedin' })
         )
       )
     ),
@@ -20590,7 +20590,7 @@ var Someways = function Someways() {
           null,
           'Find the exit using the arrow keys.'
         ),
-        _react2.default.createElement('img', { src: '../images/arrowkeys.png', alt: 'someways' }),
+        _react2.default.createElement('img', { src: './images/arrowkeys.png', alt: 'someways' }),
         _react2.default.createElement(
           'h4',
           null,

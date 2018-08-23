@@ -186,10 +186,10 @@ export class Maze extends React.Component{
           <div className="game">
             <div className="labyrinth">
               <div className="startpoint">
-                <img className="startarrow" src="../images/start.png" alt="starting point"/>
+                <img className="startarrow" src="./images/start.png" alt="starting point"/>
                 <canvas className="canvas" ref={this.canvas} width="800" height="500"/>
               </div>
-              <img className="endarrow" src="../images/end.png" alt="ending point"/>
+              <img className="endarrow" src="./images/end.png" alt="ending point"/>
             </div>
             <canvas className="clock" ref={this.clock} width="600" height="10"/>
           </div>
