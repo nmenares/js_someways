@@ -5,7 +5,7 @@ import { Ball } from './ball';
 
 const width = 800;
 const height = 500;
-const amount_of_food = 0;
+let amount_of_food = 0;
 
 
 export class Maze extends React.Component{
@@ -13,6 +13,7 @@ export class Maze extends React.Component{
     super(props);
     this.canvas = React.createRef();
     this.clock = React.createRef();
+    this.counter = React.createRef();
     this.maze = undefined;
     this.ball = undefined;
   }
@@ -26,6 +27,7 @@ export class Maze extends React.Component{
   componentDidMount(){
     const ctx = this.canvas.current.getContext("2d");
     const ctx2 = this.clock.current.getContext("2d");
+    const ctx3 = this.counter.current.getContext("2d");
     const cellSize = 10;
     const cellSpacing = 5;
     const cellWidth = Math.floor((width - cellSpacing) / (cellSize + cellSpacing));
@@ -81,10 +83,11 @@ export class Maze extends React.Component{
           start = start - 1;
           ball.move( ball.pos[0] - (cellSize + cellSpacing), ball.pos[1]);
           if(food_copy.includes(start)) {
+            amount_of_food += 1;
+            food_counter();
             food_copy = food_copy.filter(el => el != start);
-            console.log("food", food);
-            console.log("food_copy", food_copy);
             fillCell(start);
+            ctx.fillStyle = "rgb(153, 105, 241)";
             ball.draw();
             eaten += 1;
             if(start === ((width - cellSpacing)/(cellSize + cellSpacing))-1  && eaten >= 3){
@@ -102,11 +105,12 @@ export class Maze extends React.Component{
         if(maze.cells[start]["N"] === true) {
           start = start - (width - cellSpacing)/(cellSize + cellSpacing);
           ball.move( ball.pos[0], ball.pos[1] - (cellSize + cellSpacing));
-          if(food.includes(start)) {
+          if(food_copy.includes(start)) {
+            amount_of_food += 1;
+            food_counter();
             food_copy = food_copy.filter(el => el != start);
-            console.log("food", food);
-            console.log("food_copy", food_copy);
             fillCell(start);
+            ctx.fillStyle = "rgb(153, 105, 241)";
             ball.draw();
             eaten += 1;
             if(start === ((width - cellSpacing)/(cellSize + cellSpacing))-1  && eaten >= 3){
@@ -124,11 +128,12 @@ export class Maze extends React.Component{
         if(maze.cells[start]["E"] === true) {
           start = start + 1;
           ball.move( ball.pos[0] + (cellSize + cellSpacing), ball.pos[1]);
-          if(food.includes(start)) {
+          if(food_copy.includes(start)) {
+            amount_of_food += 1;
+            food_counter();
             food_copy = food_copy.filter(el => el != start);
-            console.log("food", food);
-            console.log("food_copy", food_copy);
             fillCell(start);
+            ctx.fillStyle = "rgb(153, 105, 241)";
             ball.draw();
             eaten += 1;
             if(start === ((width - cellSpacing)/(cellSize + cellSpacing))-1  && eaten >= 3){
@@ -146,11 +151,12 @@ export class Maze extends React.Component{
         if(maze.cells[start]["S"] === true) {
           start = start + (width - cellSpacing)/(cellSize + cellSpacing);
           ball.move( ball.pos[0], ball.pos[1] + (cellSize + cellSpacing));
-          if(food.includes(start)) {
+          if(food_copy.includes(start)) {
+            amount_of_food += 1;
+            food_counter();
             food_copy = food_copy.filter(el => el != start);
-            console.log("food", food);
-            console.log("food_copy", food_copy);
             fillCell(start);
+            ctx.fillStyle = "rgb(153, 105, 241)";
             ball.draw();
             eaten += 1;
             if(start === ((width - cellSpacing)/(cellSize + cellSpacing))-1  && eaten >= 3){
@@ -192,7 +198,7 @@ export class Maze extends React.Component{
             youLose();
             window.removeEventListener("keydown", moveBall);
           }
-          }, 1000)
+        }, 1000)
         }
     };
 
@@ -212,13 +218,33 @@ export class Maze extends React.Component{
       ctx.fillRect(i * cellSize + (i + 1) * cellSpacing, j * cellSize + (j + 1) * cellSpacing, cellSize, cellSize);
     };
 
+    function food_counter(){
+      if (amount_of_food < 3) {
+        ctx3.fillStyle = "white";
+        ctx3.fillRect(0, 0, 400, 40);
+        ctx3.fillStyle = "Black";
+        ctx3.textAlign = "center";
+        ctx3.font = "20px monospace";
+        ctx3.fillText(`${amount_of_food} out of 3`, 200 , 30);
+      } else {
+        ctx3.fillStyle = "white";
+        ctx3.fillRect(0, 0, 400, 40);
+        ctx3.fillStyle = "Black";
+        ctx3.textAlign = "center";
+        ctx3.font = "20px monospace";
+        ctx3.fillText(`Go to the exit!`, 200 , 30);
+      }
+    }
+
     function setup(){
+      food_counter();
+      ctx.globalAlpha=1;
       ctx2.fillStyle = "black";
       ctx2.fillRect(0, 0, 600, 10);
       ctx.fillStyle = "rgb(61, 254, 213)";
-      ctx.globalAlpha=0.8;
+      ctx.globalAlpha=0.3;
       ctx.beginPath();
-      ctx.arc(start_pos[0], start_pos[1], 15, 0, 2 * Math.PI, true);
+      ctx.arc(start_pos[0], start_pos[1], 10, 0, 2 * Math.PI, true);
       ctx.fill();
       ctx.globalAlpha=1;
       ctx.fillStyle = "rgb(61, 254, 213)";
@@ -233,6 +259,7 @@ export class Maze extends React.Component{
       stop_prior_time = true;
       timer = 0;
       eaten = 0;
+      amount_of_food = 0;
       start = start_array[random_index];
       start_pos = [start_positions[random_index][0], start_positions[random_index][1]];
       food_copy = food.map (el => el);
@@ -242,6 +269,7 @@ export class Maze extends React.Component{
       maze.cleanMaze();
       ball.initialPosition(start_pos);
       setup();
+      ctx.fillStyle = "rgb(153, 105, 241)";
       ball.draw();
       window.addEventListener("keydown", moveBall);
       window.addEventListener("keydown", timerBar, {once: true})
@@ -258,6 +286,7 @@ export class Maze extends React.Component{
       if (done) {
         clearInterval(timerId);
         setup();
+        ctx.fillStyle = "rgb(153, 105, 241)";
         ball.draw();
         window.addEventListener("keydown", moveBall);
         window.addEventListener("keydown", timerBar, {once: true})
@@ -274,6 +303,7 @@ export class Maze extends React.Component{
           <div className="buttons">
             <button onClick={this.handleRefresh.bind(this)}>New</button>
             <button className="restart" >Restart</button>
+            <canvas className="counter" ref={this.counter} width="400" height="40"/>
           </div>
           <div className="game">
             <div className="labyrinth">

@@ -136,3 +136,8 @@ body {
   color: white;
   cursor: pointer;
 }
+
+.counter {
+  width: 400px;
+  height: 40px;
+}

@@ -20017,7 +20017,6 @@ var Ball = exports.Ball = function () {
   _createClass(Ball, [{
     key: "draw",
     value: function draw() {
-      this.ctx.fillStyle = "rgb(153, 105, 241)";
       this.ctx.beginPath();
       this.ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2 * Math.PI, true);
       this.ctx.fill();
@@ -20030,15 +20029,33 @@ var Ball = exports.Ball = function () {
   }, {
     key: "move",
     value: function move(posX, posY) {
-      this.ctx.fillStyle = "rgb(219, 213, 213)";
-      this.ctx.beginPath();
-      this.ctx.fillRect(this.pos[0] - 5, this.pos[1] - 5, 10, 10);
+      var gapX = Math.abs(this.pos[0] - posX);
+      var gapY = Math.abs(this.pos[1] - posY);
+      if (gapX > gapY) {
+        for (var i = 0; i < gapX - 1; i++) {
+          if (posX >= this.pos[0]) {
+            this.pos[0] += 1;
+          } else {
+            this.pos[0] -= 1;
+          }
+          this.ctx.fillStyle = "rgb(194, 169, 240)";
+          this.draw();
+        }
+      } else {
+        for (var i = 0; i < gapY - 1; i++) {
+          if (posY >= this.pos[1]) {
+            this.pos[1] += 1;
+          } else {
+            this.pos[1] -= 1;
+          }
+          this.ctx.fillStyle = "rgb(194, 169, 240)";
+          this.draw();
+        }
+      }
       this.pos[0] = posX;
       this.pos[1] = posY;
       this.ctx.fillStyle = "rgb(153, 105, 241)";
-      this.ctx.beginPath();
-      this.ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2 * Math.PI, true);
-      this.ctx.fill();
+      this.draw();
     }
   }]);
 
@@ -20125,6 +20142,7 @@ var Maze = exports.Maze = function (_React$Component) {
 
     _this.canvas = _react2.default.createRef();
     _this.clock = _react2.default.createRef();
+    _this.counter = _react2.default.createRef();
     _this.maze = undefined;
     _this.ball = undefined;
     return _this;
@@ -20141,6 +20159,7 @@ var Maze = exports.Maze = function (_React$Component) {
     value: function componentDidMount() {
       var ctx = this.canvas.current.getContext("2d");
       var ctx2 = this.clock.current.getContext("2d");
+      var ctx3 = this.counter.current.getContext("2d");
       var cellSize = 10;
       var cellSpacing = 5;
       var cellWidth = Math.floor((width - cellSpacing) / (cellSize + cellSpacing));
@@ -20199,12 +20218,13 @@ var Maze = exports.Maze = function (_React$Component) {
             start = start - 1;
             ball.move(ball.pos[0] - (cellSize + cellSpacing), ball.pos[1]);
             if (food_copy.includes(start)) {
+              amount_of_food += 1;
+              food_counter();
               food_copy = food_copy.filter(function (el) {
                 return el != start;
               });
-              console.log("food", food);
-              console.log("food_copy", food_copy);
               fillCell(start);
+              ctx.fillStyle = "rgb(153, 105, 241)";
               ball.draw();
               eaten += 1;
               if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
@@ -20223,13 +20243,14 @@ var Maze = exports.Maze = function (_React$Component) {
           if (maze.cells[start]["N"] === true) {
             start = start - (width - cellSpacing) / (cellSize + cellSpacing);
             ball.move(ball.pos[0], ball.pos[1] - (cellSize + cellSpacing));
-            if (food.includes(start)) {
+            if (food_copy.includes(start)) {
+              amount_of_food += 1;
+              food_counter();
               food_copy = food_copy.filter(function (el) {
                 return el != start;
               });
-              console.log("food", food);
-              console.log("food_copy", food_copy);
               fillCell(start);
+              ctx.fillStyle = "rgb(153, 105, 241)";
               ball.draw();
               eaten += 1;
               if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
@@ -20248,13 +20269,14 @@ var Maze = exports.Maze = function (_React$Component) {
           if (maze.cells[start]["E"] === true) {
             start = start + 1;
             ball.move(ball.pos[0] + (cellSize + cellSpacing), ball.pos[1]);
-            if (food.includes(start)) {
+            if (food_copy.includes(start)) {
+              amount_of_food += 1;
+              food_counter();
               food_copy = food_copy.filter(function (el) {
                 return el != start;
               });
-              console.log("food", food);
-              console.log("food_copy", food_copy);
               fillCell(start);
+              ctx.fillStyle = "rgb(153, 105, 241)";
               ball.draw();
               eaten += 1;
               if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
@@ -20273,13 +20295,14 @@ var Maze = exports.Maze = function (_React$Component) {
           if (maze.cells[start]["S"] === true) {
             start = start + (width - cellSpacing) / (cellSize + cellSpacing);
             ball.move(ball.pos[0], ball.pos[1] + (cellSize + cellSpacing));
-            if (food.includes(start)) {
+            if (food_copy.includes(start)) {
+              amount_of_food += 1;
+              food_counter();
               food_copy = food_copy.filter(function (el) {
                 return el != start;
               });
-              console.log("food", food);
-              console.log("food_copy", food_copy);
               fillCell(start);
+              ctx.fillStyle = "rgb(153, 105, 241)";
               ball.draw();
               eaten += 1;
               if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
@@ -20341,13 +20364,33 @@ var Maze = exports.Maze = function (_React$Component) {
         ctx.fillRect(i * cellSize + (i + 1) * cellSpacing, j * cellSize + (j + 1) * cellSpacing, cellSize, cellSize);
       };
 
+      function food_counter() {
+        if (amount_of_food < 3) {
+          ctx3.fillStyle = "white";
+          ctx3.fillRect(0, 0, 400, 40);
+          ctx3.fillStyle = "Black";
+          ctx3.textAlign = "center";
+          ctx3.font = "20px monospace";
+          ctx3.fillText(amount_of_food + ' out of 3', 200, 30);
+        } else {
+          ctx3.fillStyle = "white";
+          ctx3.fillRect(0, 0, 400, 40);
+          ctx3.fillStyle = "Black";
+          ctx3.textAlign = "center";
+          ctx3.font = "20px monospace";
+          ctx3.fillText('Go to the exit!', 200, 30);
+        }
+      }
+
       function setup() {
+        food_counter();
+        ctx.globalAlpha = 1;
         ctx2.fillStyle = "black";
         ctx2.fillRect(0, 0, 600, 10);
         ctx.fillStyle = "rgb(61, 254, 213)";
-        ctx.globalAlpha = 0.8;
+        ctx.globalAlpha = 0.3;
         ctx.beginPath();
-        ctx.arc(start_pos[0], start_pos[1], 15, 0, 2 * Math.PI, true);
+        ctx.arc(start_pos[0], start_pos[1], 10, 0, 2 * Math.PI, true);
         ctx.fill();
         ctx.globalAlpha = 1;
         ctx.fillStyle = "rgb(61, 254, 213)";
@@ -20364,6 +20407,7 @@ var Maze = exports.Maze = function (_React$Component) {
         stop_prior_time = true;
         timer = 0;
         eaten = 0;
+        amount_of_food = 0;
         start = start_array[random_index];
         start_pos = [start_positions[random_index][0], start_positions[random_index][1]];
         food_copy = food.map(function (el) {
@@ -20375,6 +20419,7 @@ var Maze = exports.Maze = function (_React$Component) {
         maze.cleanMaze();
         ball.initialPosition(start_pos);
         setup();
+        ctx.fillStyle = "rgb(153, 105, 241)";
         ball.draw();
         window.addEventListener("keydown", moveBall);
         window.addEventListener("keydown", timerBar, { once: true });
@@ -20391,6 +20436,7 @@ var Maze = exports.Maze = function (_React$Component) {
         if (done) {
           clearInterval(timerId);
           setup();
+          ctx.fillStyle = "rgb(153, 105, 241)";
           ball.draw();
           window.addEventListener("keydown", moveBall);
           window.addEventListener("keydown", timerBar, { once: true });
@@ -20417,7 +20463,8 @@ var Maze = exports.Maze = function (_React$Component) {
             'button',
             { className: 'restart' },
             'Restart'
-          )
+          ),
+          _react2.default.createElement('canvas', { className: 'counter', ref: this.counter, width: '400', height: '40' })
         ),
         _react2.default.createElement(
           'div',
@@ -20501,24 +20548,18 @@ var MazeObj = exports.MazeObj = function () {
     value: function cleanMaze() {
       var _this = this;
 
+      this.ctx.fillStyle = "black";
+      this.ctx.fillRect(0, 0, this.width, this.height);
       this.cells.forEach(function (cell, idx) {
+        _this.ctx.fillStyle = "white";
+        _this.fillCell(idx);
         ["S", "E", "W", "N"].forEach(function (d) {
           if (d === "S" && cell["S"] === true) {
-            var new_idx = idx + (_this.width - _this.cellSpacing) / (_this.cellSize + _this.cellSpacing);
             _this.ctx.fillStyle = "white";
-            _this.fillCell(new_idx);
-          } else if (d === "N" && cell["N"] === true) {
-            var _new_idx = idx - (_this.width - _this.cellSpacing) / (_this.cellSize + _this.cellSpacing);
+            _this.fillSouth(idx);
+          }if (d === "E" && cell["E"] === true) {
             _this.ctx.fillStyle = "white";
-            _this.fillCell(_new_idx);
-          } else if (d === "E" && cell["E"] === true) {
-            var _new_idx2 = idx + 1;
-            _this.ctx.fillStyle = "white";
-            _this.fillCell(_new_idx2);
-          } else if (d === "W" && cell["W"] === true) {
-            var _new_idx3 = idx - 1;
-            _this.ctx.fillStyle = "white";
-            _this.fillCell(_new_idx3);
+            _this.fillEast(idx);
           }
         });
       });
