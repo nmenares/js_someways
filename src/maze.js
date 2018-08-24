@@ -44,6 +44,7 @@ export class Maze extends React.Component{
     let timer = 0;
     let outer  = document.getElementsByClassName('restart') [0];
     let stop_prior_time = false;
+    let game_over = false;
     let eaten = 0;
 
     const maze = new MazeObj(width, height, cellSize, cellSpacing, ctx);
@@ -74,6 +75,7 @@ export class Maze extends React.Component{
       ctx.textAlign = "center";
       ctx.font = "64px monospace";
       ctx.fillText("Game Over", width/2 , height/2);
+      game_over = true;
     };
 
     function moveBall(e){
@@ -247,16 +249,23 @@ export class Maze extends React.Component{
       ctx.arc(start_pos[0], start_pos[1], 10, 0, 2 * Math.PI, true);
       ctx.fill();
       ctx.globalAlpha=1;
+      ctx.strokeStyle = "rgb(252, 255, 89)";
+      ctx.lineWidth=2;
+      ctx.stroke();
+      ctx.globalAlpha=1;
       ctx.fillStyle = "rgb(61, 254, 213)";
       ctx.fillRect(start_pos[0]-cellSpacing, start_pos[1]-cellSpacing, cellSize, cellSize);
-      ctx.fillStyle = "rgb(230, 46, 90)";
-      ctx.fillRect(width - cellSpacing - cellSize, cellSpacing, cellSize, cellSize);
       food.forEach(cell => fillFood(cell));
+      ctx.fillStyle = "rgb(153, 105, 241)";
+      ball.draw();
+      window.addEventListener("keydown", moveBall);
+      window.addEventListener("keydown", timerBar, {once: true})
+      outer.addEventListener("click", handleRestart);
     }
 
     function handleRestart(e){
       e.preventDefault();
-      stop_prior_time = true;
+      game_over === true ? stop_prior_time = false : stop_prior_time = true;
       timer = 0;
       eaten = 0;
       amount_of_food = 0;
@@ -269,11 +278,6 @@ export class Maze extends React.Component{
       maze.cleanMaze();
       ball.initialPosition(start_pos);
       setup();
-      ctx.fillStyle = "rgb(153, 105, 241)";
-      ball.draw();
-      window.addEventListener("keydown", moveBall);
-      window.addEventListener("keydown", timerBar, {once: true})
-      outer.addEventListener("click", handleRestart);
     }
 
     const timerId = setInterval(function() {
@@ -286,11 +290,6 @@ export class Maze extends React.Component{
       if (done) {
         clearInterval(timerId);
         setup();
-        ctx.fillStyle = "rgb(153, 105, 241)";
-        ball.draw();
-        window.addEventListener("keydown", moveBall);
-        window.addEventListener("keydown", timerBar, {once: true})
-        outer.addEventListener("click", handleRestart);
       }
       return done;
     }, 50);

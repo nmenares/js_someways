@@ -20178,6 +20178,7 @@ var Maze = exports.Maze = function (_React$Component) {
       var timer = 0;
       var outer = document.getElementsByClassName('restart')[0];
       var stop_prior_time = false;
+      var game_over = false;
       var eaten = 0;
 
       var maze = new _maze_generator.MazeObj(width, height, cellSize, cellSpacing, ctx);
@@ -20208,6 +20209,7 @@ var Maze = exports.Maze = function (_React$Component) {
         ctx.textAlign = "center";
         ctx.font = "64px monospace";
         ctx.fillText("Game Over", width / 2, height / 2);
+        game_over = true;
       };
 
       function moveBall(e) {
@@ -20393,18 +20395,25 @@ var Maze = exports.Maze = function (_React$Component) {
         ctx.arc(start_pos[0], start_pos[1], 10, 0, 2 * Math.PI, true);
         ctx.fill();
         ctx.globalAlpha = 1;
+        ctx.strokeStyle = "rgb(252, 255, 89)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
         ctx.fillStyle = "rgb(61, 254, 213)";
         ctx.fillRect(start_pos[0] - cellSpacing, start_pos[1] - cellSpacing, cellSize, cellSize);
-        ctx.fillStyle = "rgb(230, 46, 90)";
-        ctx.fillRect(width - cellSpacing - cellSize, cellSpacing, cellSize, cellSize);
         food.forEach(function (cell) {
           return fillFood(cell);
         });
+        ctx.fillStyle = "rgb(153, 105, 241)";
+        ball.draw();
+        window.addEventListener("keydown", moveBall);
+        window.addEventListener("keydown", timerBar, { once: true });
+        outer.addEventListener("click", handleRestart);
       }
 
       function handleRestart(e) {
         e.preventDefault();
-        stop_prior_time = true;
+        game_over === true ? stop_prior_time = false : stop_prior_time = true;
         timer = 0;
         eaten = 0;
         amount_of_food = 0;
@@ -20419,11 +20428,6 @@ var Maze = exports.Maze = function (_React$Component) {
         maze.cleanMaze();
         ball.initialPosition(start_pos);
         setup();
-        ctx.fillStyle = "rgb(153, 105, 241)";
-        ball.draw();
-        window.addEventListener("keydown", moveBall);
-        window.addEventListener("keydown", timerBar, { once: true });
-        outer.addEventListener("click", handleRestart);
       }
 
       var timerId = setInterval(function () {
@@ -20436,11 +20440,6 @@ var Maze = exports.Maze = function (_React$Component) {
         if (done) {
           clearInterval(timerId);
           setup();
-          ctx.fillStyle = "rgb(153, 105, 241)";
-          ball.draw();
-          window.addEventListener("keydown", moveBall);
-          window.addEventListener("keydown", timerBar, { once: true });
-          outer.addEventListener("click", handleRestart);
         }
         return done;
       }, 50);
