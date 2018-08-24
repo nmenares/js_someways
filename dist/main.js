@@ -20032,17 +20032,19 @@ var Ball = exports.Ball = function () {
       var gapX = Math.abs(this.pos[0] - posX);
       var gapY = Math.abs(this.pos[1] - posY);
       if (gapX > gapY) {
-        for (var i = 0; i < gapX - 1; i++) {
+        for (var i = 0; i < gapX; i++) {
+          this.ctx.fillStyle = "rgb(194, 169, 240)";
+          this.draw();
           if (posX >= this.pos[0]) {
             this.pos[0] += 1;
           } else {
             this.pos[0] -= 1;
           }
-          this.ctx.fillStyle = "rgb(194, 169, 240)";
-          this.draw();
         }
       } else {
-        for (var i = 0; i < gapY - 1; i++) {
+        for (var i = 0; i < gapY; i++) {
+          this.ctx.fillStyle = "rgb(194, 169, 240)";
+          this.draw();
           if (posY >= this.pos[1]) {
             this.pos[1] += 1;
           } else {
@@ -20167,7 +20169,7 @@ var Maze = exports.Maze = function (_React$Component) {
       var start_positions = [[cellSize, height - cellSize], [cellSize, cellSize], [width - cellSize, height - cellSize]];
       var random_index = Math.floor(Math.random() * start_positions.length);
       var third = Math.floor(cellWidth * cellHeight / 3);
-      var food = [1 + Math.floor(Math.random() * third - 1), third + Math.floor(Math.random() * third - 1), 2 * third + Math.floor(Math.random() * third)];
+      var food = [third + Math.floor(Math.random() * third - 1)];
       var food_copy = food.map(function (el) {
         return el;
       });
@@ -20198,6 +20200,13 @@ var Maze = exports.Maze = function (_React$Component) {
         ctx.font = "64px monospace";
         ctx.fillText("You Win!", width / 2, height / 2);
         winner = true;
+        game_over = true;
+        ctx3.fillStyle = "white";
+        ctx3.fillRect(0, 0, 400, 40);
+        ctx3.fillStyle = "black";
+        ctx3.textAlign = "center";
+        ctx3.font = "20px monospace";
+        ctx3.fillText('Congratulations, you win!', 200, 30);
       };
 
       var youLose = function youLose() {
@@ -20210,6 +20219,12 @@ var Maze = exports.Maze = function (_React$Component) {
         ctx.font = "64px monospace";
         ctx.fillText("Game Over", width / 2, height / 2);
         game_over = true;
+        ctx3.fillStyle = "white";
+        ctx3.fillRect(0, 0, 400, 40);
+        ctx3.fillStyle = "black";
+        ctx3.textAlign = "center";
+        ctx3.font = "20px monospace";
+        ctx3.fillText('You lose :(', 200, 30);
       };
 
       function moveBall(e) {
@@ -20229,14 +20244,17 @@ var Maze = exports.Maze = function (_React$Component) {
               ctx.fillStyle = "rgb(153, 105, 241)";
               ball.draw();
               eaten += 1;
-              if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
-                youWin();
-                window.removeEventListener("keydown", moveBall);
-              }
             }
-            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
+            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten === 1) {
               youWin();
               window.removeEventListener("keydown", moveBall);
+            } else if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+              ctx3.fillStyle = "black";
+              ctx3.fillRect(0, 0, 400, 40);
+              ctx3.fillStyle = "white";
+              ctx3.textAlign = "center";
+              ctx3.font = "20px monospace";
+              ctx3.fillText('Go to green square first!', 200, 30);
             }
           }
         } else if (e.keyCode === 38) {
@@ -20255,14 +20273,17 @@ var Maze = exports.Maze = function (_React$Component) {
               ctx.fillStyle = "rgb(153, 105, 241)";
               ball.draw();
               eaten += 1;
-              if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
-                youWin();
-                window.removeEventListener("keydown", moveBall);
-              }
             }
-            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
+            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten === 1) {
               youWin();
               window.removeEventListener("keydown", moveBall);
+            } else if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+              ctx3.fillStyle = "black";
+              ctx3.fillRect(0, 0, 400, 40);
+              ctx3.fillStyle = "white";
+              ctx3.textAlign = "center";
+              ctx3.font = "20px monospace";
+              ctx3.fillText('Go to green square first!', 200, 30);
             }
           }
         } else if (e.keyCode === 39) {
@@ -20281,14 +20302,17 @@ var Maze = exports.Maze = function (_React$Component) {
               ctx.fillStyle = "rgb(153, 105, 241)";
               ball.draw();
               eaten += 1;
-              if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
-                youWin();
-                window.removeEventListener("keydown", moveBall);
-              }
             }
-            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
+            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten === 1) {
               youWin();
               window.removeEventListener("keydown", moveBall);
+            } else if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+              ctx3.fillStyle = "black";
+              ctx3.fillRect(0, 0, 400, 40);
+              ctx3.fillStyle = "white";
+              ctx3.textAlign = "center";
+              ctx3.font = "20px monospace";
+              ctx3.fillText('Go to green square first!', 200, 30);
             }
           }
         } else if (e.keyCode === 40) {
@@ -20307,14 +20331,17 @@ var Maze = exports.Maze = function (_React$Component) {
               ctx.fillStyle = "rgb(153, 105, 241)";
               ball.draw();
               eaten += 1;
-              if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
-                youWin();
-                window.removeEventListener("keydown", moveBall);
-              }
             }
-            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten >= 3) {
+            if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1 && eaten === 1) {
               youWin();
               window.removeEventListener("keydown", moveBall);
+            } else if (start === (width - cellSpacing) / (cellSize + cellSpacing) - 1) {
+              ctx3.fillStyle = "black";
+              ctx3.fillRect(0, 0, 400, 40);
+              ctx3.fillStyle = "white";
+              ctx3.textAlign = "center";
+              ctx3.font = "20px monospace";
+              ctx3.fillText('Go to green square first!', 200, 30);
             }
           }
         }
@@ -20356,7 +20383,7 @@ var Maze = exports.Maze = function (_React$Component) {
         ctx.fillStyle = "rgb(245, 118, 221)";
         ctx.globalAlpha = 0.4;
         ctx.beginPath();
-        ctx.arc(i * cellSize + (i + 2) * cellSpacing, j * cellSize + (j + 2) * cellSpacing, 12, 0, 2 * Math.PI, true);
+        ctx.arc(i * cellSize + (i + 2) * cellSpacing, j * cellSize + (j + 2) * cellSpacing, 15, 0, 2 * Math.PI, true);
         ctx.fill();
         ctx.globalAlpha = 1;
         ctx.fillStyle = "rgb(110, 245, 82)";
@@ -20373,13 +20400,13 @@ var Maze = exports.Maze = function (_React$Component) {
       };
 
       function food_counter() {
-        if (amount_of_food < 3) {
+        if (amount_of_food < 1) {
           ctx3.fillStyle = "white";
           ctx3.fillRect(0, 0, 400, 40);
           ctx3.fillStyle = "Black";
           ctx3.textAlign = "center";
           ctx3.font = "20px monospace";
-          ctx3.fillText(amount_of_food + ' out of 3', 200, 30);
+          ctx3.fillText('Go to green square!', 200, 30);
         } else {
           ctx3.fillStyle = "white";
           ctx3.fillRect(0, 0, 400, 40);
@@ -20415,6 +20442,7 @@ var Maze = exports.Maze = function (_React$Component) {
       function handleRestart(e) {
         e.preventDefault();
         game_over === true ? stop_prior_time = false : stop_prior_time = true;
+        winner = false;
         timer = 0;
         eaten = 0;
         amount_of_food = 0;
@@ -20704,8 +20732,8 @@ var Someways = function Someways() {
         { className: 'sub_navbar' },
         _react2.default.createElement('img', { src: './images/someways.png', alt: 'Someways' }),
         _react2.default.createElement(
-          'h1',
-          null,
+          'a',
+          { className: 'title', href: 'https://nmenares.github.io/js_someways/' },
           'SomeWays'
         )
       ),
@@ -20733,7 +20761,7 @@ var Someways = function Someways() {
         _react2.default.createElement(
           'h3',
           null,
-          'Find the exit using the arrow keys.'
+          'Find the exit using the arrow keys! Don\'t forget to pass for the green square!'
         ),
         _react2.default.createElement('img', { src: './images/arrowkeys.png', alt: 'someways' }),
         _react2.default.createElement(

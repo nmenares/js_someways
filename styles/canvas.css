@@ -96,8 +96,9 @@ body {
 
 .sidebar h3{
   margin-top: 100px;
-  font-size: 20px;
+  font-size: 18px;
   text-align: center;
+  line-height: 24px;
 }
 
 .sidebar h4{
@@ -141,4 +142,11 @@ body {
 .counter {
   width: 400px;
   height: 40px;
+}
+
+.title {
+  text-decoration: none;
+  color: black;
+  font-size: 30px;
+  font-weight: bold;
 }
