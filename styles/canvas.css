@@ -33,7 +33,8 @@ body {
 }
 
 .labyrinth img {
-  width: 24px;
+  width: 30px;
+  margin-top: -5px;
 }
 
 

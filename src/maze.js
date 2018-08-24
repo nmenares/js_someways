@@ -207,6 +207,12 @@ export class Maze extends React.Component{
     function fillFood(index){
       let i = index % cellWidth;
       let j = Math.floor(index / cellWidth);
+      ctx.fillStyle="rgb(245, 118, 221)";
+      ctx.globalAlpha=0.4;
+      ctx.beginPath();
+      ctx.arc(i * cellSize + (i + 2) * cellSpacing, j * cellSize + (j + 2) * cellSpacing, 12, 0, 2 * Math.PI, true);
+      ctx.fill();
+      ctx.globalAlpha=1;
       ctx.fillStyle="rgb(110, 245, 82)";
       ctx.fillRect(i * cellSize + (i + 1) * cellSpacing, j * cellSize + (j + 1) * cellSpacing, cellSize, cellSize);
       ctx.fillStyle="rgb(245, 118, 221)";
@@ -244,18 +250,13 @@ export class Maze extends React.Component{
       ctx2.fillStyle = "black";
       ctx2.fillRect(0, 0, 600, 10);
       ctx.fillStyle = "rgb(61, 254, 213)";
-      ctx.globalAlpha=0.3;
+      ctx.globalAlpha=0.6;
       ctx.beginPath();
-      ctx.arc(start_pos[0], start_pos[1], 10, 0, 2 * Math.PI, true);
+      ctx.arc(start_pos[0], start_pos[1], 20, 0, 2 * Math.PI, true);
       ctx.fill();
       ctx.globalAlpha=1;
-      ctx.strokeStyle = "rgb(252, 255, 89)";
-      ctx.lineWidth=2;
-      ctx.stroke();
-      ctx.globalAlpha=1;
-      ctx.fillStyle = "rgb(61, 254, 213)";
-      ctx.fillRect(start_pos[0]-cellSpacing, start_pos[1]-cellSpacing, cellSize, cellSize);
       food.forEach(cell => fillFood(cell));
+      ctx.globalAlpha=1;
       ctx.fillStyle = "rgb(153, 105, 241)";
       ball.draw();
       window.addEventListener("keydown", moveBall);
