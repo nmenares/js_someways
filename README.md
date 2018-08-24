@@ -29,8 +29,12 @@ The project is in JavaScript and the maze is created using [Random Transversal A
 * The ball can go to any direction that the user indicates using key arrows, always if the direction value is true, that means that it is considering the black walls. The starting point could be in any corner, except for the top-right one, where the Exit is.
 * Green-square is randomly set in the middle section of the maze. It is gone once the ball reaches that cell.
 
+* Flow
+ 1. ![](images/ballpicture.png)
 
- ![](images/ballpicture.png)  =>  ![](images/green-squarepicture.png)   =>    ![](images/exitpicture.png)
+ 2. ![](images/green-squarepicture.png)
+
+ 3. ![](images/exitpicture.png)
 
 
 
