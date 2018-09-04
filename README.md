@@ -1,4 +1,5 @@
 # Someways
+![](images/someways.png)
 
 ## [Live Demo](https://nmenares.github.io/js_someways/)
 ![gif](images/demo.gif)
