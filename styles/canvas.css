@@ -76,11 +76,10 @@ body {
 }
 
 .body {
-  margin-left: 100px;
-  margin-right: 200px;
+  margin: 5% 10%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 }
 
