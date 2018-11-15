@@ -19,7 +19,7 @@ export class Ball {
     let gapX = Math.abs(this.pos[0] - posX);
     let gapY = Math.abs(this.pos[1] - posY);
     if (gapX > gapY){
-      for(var i=0; i < gapX; i++){
+      for(let i=0; i < gapX; i++){
         this.ctx.fillStyle = "rgb(194, 169, 240)";
         this.draw();
         if (posX >= this.pos[0]){
@@ -29,7 +29,7 @@ export class Ball {
         }
       }
     }else{
-      for(var i=0; i < gapY; i++){
+      for(let i=0; i < gapY; i++){
         this.ctx.fillStyle = "rgb(194, 169, 240)";
         this.draw();
         if (posY >= this.pos[1]){
