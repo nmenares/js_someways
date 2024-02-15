@@ -11,40 +11,39 @@ export class Ball {
     this.ctx.fill();
   }
 
-  initialPosition(pos){
+  initialPosition(pos) {
     this.pos = pos;
   }
 
   move(posX, posY) {
     let gapX = Math.abs(this.pos[0] - posX);
     let gapY = Math.abs(this.pos[1] - posY);
-    if (gapX > gapY){
-      for(let i=0; i < gapX; i++){
-        this.ctx.fillStyle = "rgb(194, 169, 240)";
+    if (gapX > gapY) {
+      for (let i = 0; i < gapX; i++) {
+        this.ctx.fillStyle = "#b8e0d2";
         this.draw();
-        if (posX >= this.pos[0]){
-          this.pos[0] += 1
-        }else{
-          this.pos[0] -= 1
+        if (posX >= this.pos[0]) {
+          this.pos[0] += 1;
+        } else {
+          this.pos[0] -= 1;
         }
       }
-    }else{
-      for(let i=0; i < gapY; i++){
-        this.ctx.fillStyle = "rgb(194, 169, 240)";
+    } else {
+      for (let i = 0; i < gapY; i++) {
+        this.ctx.fillStyle = "#b8e0d2";
         this.draw();
-        if (posY >= this.pos[1]){
-          this.pos[1] += 1
-        }else{
-          this.pos[1] -= 1
+        if (posY >= this.pos[1]) {
+          this.pos[1] += 1;
+        } else {
+          this.pos[1] -= 1;
         }
-        this.ctx.fillStyle = "rgb(194, 169, 240)";
+        this.ctx.fillStyle = "#b8e0d2";
         this.draw();
       }
     }
     this.pos[0] = posX;
     this.pos[1] = posY;
-    this.ctx.fillStyle = "rgb(153, 105, 241)";
+    this.ctx.fillStyle = "#95b8d1";
     this.draw();
   }
-
 }

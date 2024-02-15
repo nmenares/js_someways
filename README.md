@@ -58,17 +58,17 @@ The project is in JavaScript and the maze is created using [Random Transversal A
 ```js
   //cleanMaze
   cleanMaze(){
-    this.ctx.fillStyle = "black";
+    this.ctx.fillStyle = "#134667";
     this.ctx.fillRect(0, 0, this.width, this.height);
     this.cells.forEach((cell, idx) => {
-      this.ctx.fillStyle = "white";
+      this.ctx.fillStyle = "#f0e6ef";
       this.fillCell(idx);
       ["S","E", "W", "N"].forEach(d => {
         if(d==="S" && (cell["S"] === true)) {
-          this.ctx.fillStyle = "white";
+          this.ctx.fillStyle = "#f0e6ef";
           this.fillSouth(idx);
         } if (d==="E" && (cell["E"] === true)) {
-          this.ctx.fillStyle = "white";
+          this.ctx.fillStyle = "#f0e6ef";
           this.fillEast(idx);
         }
       })
@@ -101,7 +101,7 @@ if (e.keyCode === 37) { //west
     if(food_copy.includes(start)) {
       amount_of_food += 1;
       food_counter();
-      food_copy = food_copy.filter(el => el != start);
+      food_copy = food_copy.filter(el => el !== start);
       fillCell(start);
       ctx.fillStyle = "rgb(153, 105, 241)";
       ball.draw();
@@ -111,9 +111,9 @@ if (e.keyCode === 37) { //west
       youWin();
       window.removeEventListener("keydown", moveBall);
     } else if (start === ((width - cellSpacing)/(cellSize + cellSpacing))-1){
-      ctx3.fillStyle = "black";
+      ctx3.fillStyle = "#134667";
       ctx3.fillRect(0, 0, 400, 40);
-      ctx3.fillStyle = "white";
+      ctx3.fillStyle = "#f0e6ef";
       ctx3.textAlign = "center";
       ctx3.font = "20px monospace";
       ctx3.fillText(`Go to green square first!`, 200 , 30);
