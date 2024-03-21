@@ -5,7 +5,7 @@ function App() {
     <div>
       <header className="navbar">
         <div className="sub_navbar">
-          <img src="someways.png" alt="Someways" />
+          <img src="../public/someways.png" alt="Someways" />
           <a className="title" href="https://nmenares.github.io/js_someways/">
             SomeWays
           </a>
@@ -16,14 +16,14 @@ function App() {
             target="_blank"
             rel="noreferrer"
           >
-            <img src="images/GitHub.png" alt="GitHub" />
+            <img src="../public/images/GitHub.png" alt="GitHub" />
           </a>
           <a
             href="https://www.linkedin.com/in/nmenares/"
             target="_blank"
             rel="noreferrer"
           >
-            <img src="images/in.png" alt="Linkedin" />
+            <img src="../public/images/in.png" alt="Linkedin" />
           </a>
         </div>
       </header>
