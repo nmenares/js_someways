@@ -1,5 +1,7 @@
 export class Ball {
   constructor(options) {
+    this.x = options.pos[0];
+    this.y = options.pos[1];
     this.pos = options.pos;
     this.radius = options.radius;
     this.ctx = options.ctx;
@@ -11,8 +13,8 @@ export class Ball {
     this.ctx.fill();
   }
 
-  initialPosition(pos) {
-    this.pos = pos;
+  initialPosition() {
+    this.pos = [this.x, this.y];
   }
 
   move(posX, posY) {

@@ -30,7 +30,8 @@ export class Maze extends React.Component {
     const cellSize = 10;
     const cellSpacing = 5;
 
-    const start_pos = [cellSize, height - cellSize];
+    let start_pos = [cellSize, height - cellSize];
+    let end_pos = [width - 2 * cellSpacing, cellSize];
 
     let start =
       ((width - cellSpacing) / (cellSize + cellSpacing)) *
@@ -52,10 +53,10 @@ export class Maze extends React.Component {
     let playing = false;
 
     const youWin = () => {
-      ctx.fillStyle = "#231942";
-      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#d6eadf";
+      ctx.globalAlpha = 0.8;
       ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = "#f0e6ef";
+      ctx.fillStyle = "#134667";
       ctx.globalAlpha = 1;
       ctx.textAlign = "center";
       ctx.font = "64px monospace";
@@ -66,14 +67,15 @@ export class Maze extends React.Component {
     };
 
     const youLose = () => {
-      ctx.fillStyle = "#231942";
-      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#134667";
+      ctx.globalAlpha = 0.8;
       ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = "#f0e6ef";
+      ctx.fillStyle = "#d6eadf";
       ctx.globalAlpha = 1;
       ctx.textAlign = "center";
       ctx.font = "64px monospace";
       ctx.fillText("Game Over", width / 2, height / 2);
+      setClass("canvas opacity-10");
       game_over = true;
     };
 
@@ -142,7 +144,7 @@ export class Maze extends React.Component {
           const timerId2 = setInterval(function () {
             if (winner) {
               clearInterval(timerId2);
-            } else if (opacity >= 0) {
+            } else if (opacity > 1) {
               opacity -= 1;
               setClass("canvas opacity-" + opacity);
             } else {
@@ -150,17 +152,23 @@ export class Maze extends React.Component {
               youLose();
               window.removeEventListener("keydown", moveBall);
             }
-          }, 6000);
+          }, 4000);
         }
       }
     }
 
     function setup() {
+      ctx.fillStyle = "#FFFF8F";
+      ctx.globalAlpha = 0.8;
+      ctx.beginPath();
+      ctx.arc(end_pos[0], end_pos[1], 20, 0, 2 * Math.PI, true);
+      ctx.fill();
+
       ctx.globalAlpha = 1;
       ctx.fillStyle = "#d6eadf";
-      ctx.globalAlpha = 0.5;
+      ctx.globalAlpha = 0.8;
       ctx.beginPath();
-      ctx.arc(start_pos[0], start_pos[1], 30, 0, 2 * Math.PI, true);
+      ctx.arc(start_pos[0], start_pos[1], 20, 0, 2 * Math.PI, true);
       ctx.fill();
       ctx.globalAlpha = 1;
       ctx.fillStyle = "#95b8d1";
@@ -174,11 +182,17 @@ export class Maze extends React.Component {
       e.preventDefault();
       winner = false;
       opacity = 10;
+      start_pos = [cellSize, height - cellSize];
+      end_pos = [width - 2 * cellSpacing, cellSize];
+
+      start =
+        ((width - cellSpacing) / (cellSize + cellSpacing)) *
+        ((height - cellSpacing) / (cellSize + cellSpacing) - 1);
       window.removeEventListener("keydown", moveBall);
       window.removeEventListener("keydown", opacityControler);
       outer.removeEventListener("click", handleRestart);
       maze.cleanMaze();
-      ball.initialPosition(start_pos);
+      ball.initialPosition();
       setup();
     }
 
