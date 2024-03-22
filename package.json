@@ -10,14 +10,10 @@
     "react-dom": "^18.2.0",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://nmenares.github.io",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
-    "dev": "vite",
+    "start": "vite",
     "build": "vite build",
-    "lint": "eslint . - ext js,jsx - report-unused-disable-directives - max-warnings 0",
-    "preview": "vite preview"
+    "serve": "vite preview"
   },
   "eslintConfig": {
     "extends": [
@@ -39,7 +35,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
-    "gh-pages": "^6.1.1",
     "vite": "^5.1.3"
   }
 }
